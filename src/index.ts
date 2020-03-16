@@ -7,7 +7,7 @@ type AuthCredentials = {
   password: string
 }
 
-const parseCredentials = (credentials: string): AuthCredentials => {
+export const parseCredentials = (credentials: string): AuthCredentials => {
   if (credentials.length < 3) {
     throw new Error(
       `Received incorrect basic auth syntax, use <username>:<password>, received ${credentials}`
@@ -29,7 +29,7 @@ const parseCredentials = (credentials: string): AuthCredentials => {
  * Compares the basic auth credentials with the configured user and password
  * @param credentials Basic Auth credentials object from `basic-auth`
  */
-const compareCredentials = (
+export const compareCredentials = (
   credentials: auth.BasicAuthResult,
   requiredCredentials: AuthCredentials
 ): boolean => {
