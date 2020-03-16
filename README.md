@@ -1,4 +1,8 @@
-# TSDX Bootstrap
+# nextjs-basic-auth-middleware
+
+Adds basic auth to a NextJS project. This listens to the environment variable `BASIC_AUTH_CREDENTIALS`.
+
+Use the following format: `<username>:<password>`, e.g. `secret_user:secret123`
 
 This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 
