@@ -1,0 +1,47 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build"
+  },
+  "dependencies": {
+    "basic-auth": "2.0.1",
+    "tsscmp": "1.0.6"
+  },
+  "peerDependencies": {
+    "next": ">=9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "nextjs-basic-auth-middleware",
+  "author": "Boris Besemer",
+  "module": "dist/nextjs-basic-auth-middleware.esm.js",
+  "devDependencies": {
+    "@types/basic-auth": "^1.1.3",
+    "@types/jest": "^25.1.4",
+    "@types/node": "12.12.2",
+    "@types/tsscmp": "^1.0.0",
+    "husky": "^4.2.3",
+    "tsdx": "^0.12.3",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
+  }
+}
