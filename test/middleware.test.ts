@@ -63,4 +63,42 @@ describe('Basic auth middleware', () => {
 
     expect(res.statusCode).toBe(401)
   })
+
+  it('returns the correct realm name on a 401', () => {
+    const req = createRequest({
+      method: 'GET',
+      url: '/test',
+      headers: {
+        Authorization: createAuthorizationHeader('test', 'test'),
+      },
+    })
+    const res = createResponse()
+
+    basicAuthMiddleware(req, res, {
+      realm: 'Test',
+      users: [{ name: 'test', password: 'testing' }],
+    })
+
+    expect(res._getHeaders()['www-authenticate']).toBe('Basic realm="Test"')
+  })
+
+  it('prefers using the environment variables when set', () => {
+    process.env.BASIC_AUTH_CREDENTIALS = 'test:testing'
+
+    const req = createRequest({
+      method: 'GET',
+      url: '/test',
+      headers: {
+        Authorization: createAuthorizationHeader('test', 'test'),
+      },
+    })
+    const res = createResponse()
+
+    basicAuthMiddleware(req, res, {
+      realm: 'Test',
+      users: [{ name: 'test', password: 'test' }],
+    })
+
+    expect(res.statusCode).toBe(401)
+  })
 })

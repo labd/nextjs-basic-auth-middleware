@@ -52,11 +52,12 @@ export const compareCredentials = (
       user.name,
       requiredCredentials.find(item => item.name === user.name)?.name ?? ''
     ) && valid
-  valid = compare(
-    user.pass,
-    requiredCredentials.find(item => item.password === user.pass)?.password ??
-      ''
-  )
+  valid =
+    compare(
+      user.pass,
+      requiredCredentials.find(item => item.password === user.pass)?.password ??
+        ''
+    ) && valid
 
   return valid
 }

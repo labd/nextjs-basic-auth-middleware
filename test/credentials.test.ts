@@ -43,6 +43,12 @@ describe('compareCredentials', () => {
 
   it('returns false when a user does not match credentials', () => {
     expect(
+      compareCredentials({ name: 'testing', pass: 'test' }, [
+        { name: 'test', password: 'test' },
+      ])
+    ).toBe(false)
+
+    expect(
       compareCredentials({ name: 'test', pass: 'secret' }, [
         { name: 'test', password: 'test' },
       ])
