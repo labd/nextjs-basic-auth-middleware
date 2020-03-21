@@ -40,6 +40,7 @@
     "@types/node": "12.12.2",
     "@types/tsscmp": "^1.0.0",
     "husky": "^4.2.3",
+    "node-mocks-http": "^1.8.1",
     "tsdx": "^0.12.3",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
