@@ -52,6 +52,18 @@ BASIC_AUTH_CREDENTIALS=user:password|user2:password2
 ```
 
 Users set using environment variables will override and thus disable users set in options.
+You can also set the paths that should (not) be checked:
+
+```sh
+# Enables basic authentication for /pages
+BASIC_AUTH_PATHS=/pages
+
+# You can set multiple paths using `;` as a delimiter
+BASIC_AUTH_PATHS=/pages;/admin
+
+# Setting excluded paths work in the same way
+BASIC_AUTH_EXCLUDE_PATHS=/api;/healthchecks
+```
 
 ## API
 ### basicAuthMiddleware()
@@ -63,6 +75,12 @@ option | description | default value
 ------ | ----------- | -------------
 `realm`| The name of the basic auth realm | `'Protected'`
 `users`| A list of users that can authenticate | `[]`
+`includePaths`| List of paths that should have protection | `['/']`
+`excludePaths`| List of paths that are excluded from protection | `[]`
+
+> **NOTE**
+> The exclude paths are always excluded from protection,
+> even if they exist in the included paths
 
 The user object consists of the following required fields:
 
