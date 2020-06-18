@@ -26,17 +26,22 @@ yarn add nextjs-basic-auth-middleware
 Set the following configuration option in your `next.config.js`:
 
 ```js
-    experimental: {
-        documentMiddleware: true
+    module.exports = {
+        experimental: {
+            documentMiddleware: true
+        }
     }
 ```
 
 Then add the middleware to the `getInitialProps` method of your document:
 
 ```js
+    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
+
     Document.getInitialProps = async ({req, res}) => {
-        await basicAuthMiddleware(req, res)
+        await basicAuthMiddleware(req, res, {})
         ...
+        return {}
     }
 ```
 
