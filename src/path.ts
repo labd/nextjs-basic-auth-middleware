@@ -3,11 +3,10 @@ import { IncomingMessage } from 'http'
 
 export const pathInRequest = (paths: string[], req: IncomingMessage) => {
   if (req.url === undefined) {
-    console.log('is undefined')
+    console.log('request url is undefined')
     return false
   }
 
-  console.log(parse(req.url))
   const path = parse(req.url).pathname
   return paths.some(item => path?.startsWith(item))
 }
