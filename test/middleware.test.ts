@@ -211,4 +211,16 @@ describe('Basic auth middleware', () => {
 
     expect(res.statusCode).toBe(200)
   })
+
+  it('works without setting a default object', () => {
+    const req = createRequest({
+      method: 'GET',
+      url: '/test',
+    })
+    const res = createResponse()
+
+    basicAuthMiddleware(req, res)
+
+    expect(res.statusCode).toBe(200)
+  })
 })
