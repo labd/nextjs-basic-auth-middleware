@@ -28,7 +28,7 @@ const basicAuthMiddleware = async (
     users = [],
     includePaths = ['/'],
     excludePaths = [],
-  }: MiddlewareOptions
+  }: MiddlewareOptions = {}
 ) => {
   // Check if credentials are set up
   const environmentCredentials = process.env.BASIC_AUTH_CREDENTIALS || ''
