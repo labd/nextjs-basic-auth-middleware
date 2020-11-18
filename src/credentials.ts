@@ -44,20 +44,7 @@ export const parseCredentials = (credentials: string): AuthCredentials => {
 export const compareCredentials = (
   user: auth.BasicAuthResult,
   requiredCredentials: AuthCredentials
-): boolean => {
-  let valid = true
-
-  valid =
-    compare(
-      user.name,
-      requiredCredentials.find(item => item.name === user.name)?.name ?? ''
-    ) && valid
-  valid =
-    compare(
-      user.pass,
-      requiredCredentials.find(item => item.password === user.pass)?.password ??
-        ''
-    ) && valid
-
-  return valid
-}
+): boolean =>
+  requiredCredentials.some(
+    item => compare(user.name, item.name) && compare(user.pass, item.password)
+  )

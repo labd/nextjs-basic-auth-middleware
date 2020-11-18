@@ -53,5 +53,23 @@ describe('compareCredentials', () => {
         { name: 'test', password: 'test' },
       ])
     ).toBe(false)
+
+    expect(
+      compareCredentials({ name: 'test', pass: '' }, [
+        { name: 'test', password: 'test' },
+      ])
+    ).toBe(false)
+
+    expect(
+      compareCredentials({ name: '', pass: 'test' }, [
+        { name: 'test', password: 'test' },
+      ])
+    ).toBe(false)
+
+    expect(
+      compareCredentials({ name: '', pass: '' }, [
+        { name: 'test', password: 'test' },
+      ])
+    ).toBe(false)
   })
 })
