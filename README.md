@@ -1,9 +1,7 @@
 # nextjs-basic-auth-middleware
 
-Adds basic auth to a NextJS project on a document level.
+Adds basic authentication headers to a NextJS project with server side rendered (SSR) pages.
 Options can be set on the basic auth middleware and overriden using environment variables.
-
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
 
 ## Installation
 
@@ -19,19 +17,7 @@ yarn add nextjs-basic-auth-middleware
 
 ## Usage
 
-> **NOTE**
-> This library requires you to set an experimental config option for
-> middleware support on a document level.
-
-Set the following configuration option in your `next.config.js`:
-
-```js
-    experimental: {
-        documentMiddleware: true
-    }
-```
-
-Then add the middleware to the `getInitialProps` method of your document:
+Either add the middleware to the `getInitialProps` method of your document:
 
 ```js
     Document.getInitialProps = async ({req, res}) => {
@@ -39,6 +25,24 @@ Then add the middleware to the `getInitialProps` method of your document:
         ...
     }
 ```
+
+Or add it to individual pages in the `getServerSideProps` method:
+```js
+    export async function getServerSideProps({ req, res}) => {
+        await basicAuthMiddleware(req, res)
+        ...
+    }
+```
+
+
+### What about static pages (SSG, ISR)?
+
+This package does not support static pages because there's no server running in front of it.
+
+These are some examples you can use to add support for static pages:
+ -  For Vercel deployments you can check [vercel-basic-auth](https://github.com/flawyte/vercel-basic-auth).
+ -  For sites behind AWS CloudFront you can add a Lambda@edge function that adds authentication headers
+ -  For Cloudflare you could use a Cloudflare worker that adds authentication headers
 
 ### Setting environment variables
 If you want to override credentials you can use the `BASIC_AUTH_CREDENTIALS` environment variable:
@@ -109,3 +113,6 @@ The package is optimized and bundled with Rollup into multiple formats (CommonJS
 
 Runs the test watcher (Jest) in an interactive mode.
 By default, runs tests related to files changed since the last commit.
+
+
+This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
