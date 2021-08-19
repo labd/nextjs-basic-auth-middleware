@@ -223,4 +223,21 @@ describe('Basic auth middleware', () => {
 
     expect(res.statusCode).toBe(200)
   })
+
+  it('does not process requests without url available', () => {
+    const req = createRequest({
+      method: 'GET',
+      headers: {
+        Authorization: createAuthorizationHeader('test', 'test'),
+      },
+    })
+
+    const res = createResponse()
+
+    basicAuthMiddleware(req, res, {
+      users: [{ name: 'test', password: 'testing' }],
+    })
+
+    expect(res.statusCode).toBe(200)
+  })
 })

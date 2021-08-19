@@ -30,6 +30,11 @@ const basicAuthMiddleware = async (
     excludePaths = [],
   }: MiddlewareOptions = {}
 ) => {
+  if (!req?.url) {
+    // Current request object has no url defined so cannot set up basic authentication
+    // This means page does not have a getServerSideProps or getInitialProps function
+    return
+  }
   // Check if credentials are set up
   const environmentCredentials = process.env.BASIC_AUTH_CREDENTIALS || ''
   if (environmentCredentials.length === 0 && users.length === 0) {
