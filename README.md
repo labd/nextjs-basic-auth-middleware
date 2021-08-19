@@ -17,7 +17,17 @@ yarn add nextjs-basic-auth-middleware
 
 ## Usage
 
-Either add the middleware to the `getInitialProps` method of your document:
+Either add it to individual pages in the `getServerSideProps` method:
+```js
+    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
+
+    export async function getServerSideProps({ req, res }) => {
+        await basicAuthMiddleware(req, res)
+        ...
+    }
+```
+
+Or add the middleware to the `getInitialProps` method of your document:
 
 ```js
     import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
@@ -27,16 +37,9 @@ Either add the middleware to the `getInitialProps` method of your document:
         ...
     }
 ```
+> :warning: This will not work if you have pages that use static optimization, e.g. no use of `getInitialProps` or `getServerSideProps`
 
-Or add it to individual pages in the `getServerSideProps` method:
-```js
-    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
-
-    export async function getServerSideProps({ req, res }) => {
-        await basicAuthMiddleware(req, res)
-        ...
-    }
-```
+But this will work anywhere where there is a request and response object available (app/api routes as well).
 
 ### What about static pages (SSG, ISR)?
 
@@ -74,7 +77,7 @@ BASIC_AUTH_EXCLUDE_PATHS=/api;/healthchecks
 
 ## API
 ### basicAuthMiddleware()
-```basicAuthMiddleware(reg: http.IncomingMessage, res: http.ServerResponse, options)```
+```basicAuthMiddleware(req: http.IncomingMessage, res: http.ServerResponse, options)```
 
 The options object can contain any of the following options:
 
