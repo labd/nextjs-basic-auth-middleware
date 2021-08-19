@@ -1,7 +1,7 @@
 # nextjs-basic-auth-middleware
 
 Adds basic authentication headers to a NextJS project with server side rendered (SSR) pages.
-Options can be set on the basic auth middleware and overriden using environment variables.
+Options can be set on the basic auth middleware and overridden using environment variables.
 
 ## Installation
 
@@ -20,7 +20,9 @@ yarn add nextjs-basic-auth-middleware
 Either add the middleware to the `getInitialProps` method of your document:
 
 ```js
-    Document.getInitialProps = async ({req, res}) => {
+    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
+
+    Document.getInitialProps = async ({ req, res }) => {
         await basicAuthMiddleware(req, res)
         ...
     }
@@ -28,12 +30,13 @@ Either add the middleware to the `getInitialProps` method of your document:
 
 Or add it to individual pages in the `getServerSideProps` method:
 ```js
-    export async function getServerSideProps({ req, res}) => {
+    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
+
+    export async function getServerSideProps({ req, res }) => {
         await basicAuthMiddleware(req, res)
         ...
     }
 ```
-
 
 ### What about static pages (SSG, ISR)?
 
