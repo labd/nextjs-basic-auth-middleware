@@ -1,6 +1,7 @@
 # nextjs-basic-auth-middleware
 
-Adds basic authentication headers to a NextJS project with server side rendered (SSR) pages.
+Adds basic auth support to Next.js projects using the official middleware approach (with a `_middleware` file).
+An alternative approach for server side rendered (SSR) pages is also available.
 Options can be set on the basic auth middleware and overridden using environment variables.
 
 ## Installation
@@ -17,12 +18,26 @@ yarn add nextjs-basic-auth-middleware
 
 ## Usage
 
+### Next.js Middleware
+The Next.js middleware functionality allows you to add basic auth in front of all your requests, see the [Next.js Middleware documentation](https://nextjs.org/docs/advanced-features/middleware) for more information.
+
+```js
+    import { createNextMiddleware } from 'nextjs-basic-auth-middleware'
+
+    export const middleware = createNextMiddleware(options)
+```
+
+
+### Original approach
+
+This approach only works for server side rendered pages where a request and response object are available.
+
 Either add it to individual pages in the `getServerSideProps` method:
 ```js
-    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
+    import { pageMiddleware } from 'nextjs-basic-auth-middleware'
 
     export async function getServerSideProps({ req, res }) => {
-        await basicAuthMiddleware(req, res)
+        await pageMiddleware(req, res)
         ...
     }
 ```
@@ -30,10 +45,10 @@ Either add it to individual pages in the `getServerSideProps` method:
 Or add the middleware to the `getInitialProps` method of your document:
 
 ```js
-    import basicAuthMiddleware from 'nextjs-basic-auth-middleware'
+    import { pageMiddleware } from 'nextjs-basic-auth-middleware'
 
     Document.getInitialProps = async ({ req, res }) => {
-        await basicAuthMiddleware(req, res)
+        await pageMiddleware(req, res)
         ...
     }
 ```
@@ -43,9 +58,9 @@ But this will work anywhere where there is a request and response object availab
 
 ### What about static pages (SSG, ISR)?
 
-This package does not support static pages because there's no server running in front of it.
+Use the Next.js middleware approach if possible.
 
-These are some examples you can use to add support for static pages:
+Some alternatives if this approach will not work for you:
  -  For Vercel deployments you can check [vercel-basic-auth](https://github.com/flawyte/vercel-basic-auth).
  -  For sites behind AWS CloudFront you can add a Lambda@edge function that adds authentication headers
  -  For Cloudflare you could use a Cloudflare worker that adds authentication headers

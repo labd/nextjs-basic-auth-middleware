@@ -1,6 +1,12 @@
+import nodeFetch from 'node-fetch'
+
+// @ts-ignore
+global.fetch = nodeFetch
+// @ts-ignore
+global.Request = nodeFetch.Request
 import { createRequest, createResponse } from 'node-mocks-http'
 
-import basicAuthMiddleware from '../src'
+import { pageMiddleware } from '../src'
 import { createAuthorizationHeader } from './utils'
 
 describe('Basic auth middleware', () => {
@@ -11,7 +17,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {})
+    pageMiddleware(req, res, {})
 
     expect(res.statusCode).toBe(200)
   })
@@ -23,7 +29,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'test' }],
     })
 
@@ -40,7 +46,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'test' }],
     })
 
@@ -57,7 +63,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
     })
 
@@ -74,7 +80,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       realm: 'Test',
       users: [{ name: 'test', password: 'testing' }],
     })
@@ -94,7 +100,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       realm: 'Test',
       users: [{ name: 'test', password: 'test' }],
     })
@@ -112,7 +118,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
       includePaths: ['/testing'],
     })
@@ -130,7 +136,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
       excludePaths: ['/test'],
     })
@@ -148,7 +154,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
       excludePaths: ['/test'],
     })
@@ -166,7 +172,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
       includePaths: ['/test'],
       excludePaths: ['/test/api'],
@@ -186,7 +192,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
     })
 
@@ -204,7 +210,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
       excludePaths: ['/test'],
     })
@@ -219,7 +225,7 @@ describe('Basic auth middleware', () => {
     })
     const res = createResponse()
 
-    basicAuthMiddleware(req, res)
+    pageMiddleware(req, res)
 
     expect(res.statusCode).toBe(200)
   })
@@ -234,7 +240,7 @@ describe('Basic auth middleware', () => {
 
     const res = createResponse()
 
-    basicAuthMiddleware(req, res, {
+    pageMiddleware(req, res, {
       users: [{ name: 'test', password: 'testing' }],
     })
 
