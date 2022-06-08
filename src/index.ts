@@ -1,5 +1,4 @@
 import { IncomingMessage, ServerResponse } from 'http'
-import auth from 'basic-auth'
 import { NextRequest, NextResponse } from 'next/server'
 
 import {
@@ -8,6 +7,7 @@ import {
   AuthCredentials,
 } from './credentials'
 import { pathInRequest } from './path'
+import { basicAuthentication } from './lib/auth'
 
 export type MiddlewareOptions = {
   realm?: string
@@ -62,7 +62,7 @@ export const pageMiddleware = async (
       ? parseCredentials(environmentCredentials)
       : users
 
-  const currentUser = auth(req)
+  const currentUser = basicAuthentication(req.headers.authorization)
   if (!currentUser || !compareCredentials(currentUser, credentialsObject)) {
     res.statusCode = 401
     res.setHeader('WWW-Authenticate', `Basic realm="${realm}"`)
@@ -111,7 +111,7 @@ export const createNextMiddleware = ({
   const authHeader = req.headers.get('authorization')
 
   if (authHeader) {
-    const currentUser = auth.parse(authHeader)
+    const currentUser = basicAuthentication(authHeader)
 
     if (currentUser && compareCredentials(currentUser, credentialsObject)) {
       return NextResponse.next()
