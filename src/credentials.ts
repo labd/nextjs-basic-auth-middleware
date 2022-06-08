@@ -1,5 +1,5 @@
-import auth from 'basic-auth'
-import compare from 'tsscmp'
+import { BasicAuthResult } from './lib/auth'
+import { safeCompare } from './lib/compare'
 
 // This contains all the logic for parsing and checking credentials
 type AuthCredentialsObject = {
@@ -42,9 +42,11 @@ export const parseCredentials = (credentials: string): AuthCredentials => {
  * @param credentials Basic Auth credentials object from `basic-auth`
  */
 export const compareCredentials = (
-  user: auth.BasicAuthResult,
+  input: BasicAuthResult,
   requiredCredentials: AuthCredentials
 ): boolean =>
   requiredCredentials.some(
-    item => compare(user.name, item.name) && compare(user.pass, item.password)
+    item =>
+      safeCompare(input.user, item.name) &&
+      safeCompare(input.pass, item.password)
   )
