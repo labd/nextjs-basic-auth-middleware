@@ -21,7 +21,7 @@ export type MiddlewareOptions = {
  * @param req Http server incoming message
  * @param res Server response
  */
-export const pageMiddleware = async (
+export const pageMiddleware = (
   req: IncomingMessage,
   res: ServerResponse,
   {
@@ -71,7 +71,7 @@ export const pageMiddleware = async (
 }
 
 /**
- * Basic authentication middleware based on Next Middleware (`_middleware` file)
+ * Creates a default Next middleware function that returns `NextResponse.next()` if the basic auth passes
  * @param req Next middleware request
  * @param options Options object based on MiddlewareOptions
  * @returns Either a 401 error or goes to the next page
@@ -81,12 +81,26 @@ export const createNextMiddleware = ({
   users = [],
   includePaths = ['/'],
   excludePaths = [],
-}: MiddlewareOptions = {}) => async (req: NextRequest) => {
+}: MiddlewareOptions = {}) => (req: NextRequest) => {
+  nextBasicAuthMiddleware({ realm, users, includePaths, excludePaths }, req)
+
+  return NextResponse.next()
+}
+
+export const nextBasicAuthMiddleware = (
+  {
+    realm = 'protected',
+    users = [],
+    includePaths = ['/'],
+    excludePaths = [],
+  }: MiddlewareOptions = {},
+  req: NextRequest
+) => {
   // Check if credentials are set up
   const environmentCredentials = process.env.BASIC_AUTH_CREDENTIALS || ''
   if (environmentCredentials.length === 0 && users.length === 0) {
     // No credentials set up, continue rendering the page as normal
-    return NextResponse.next()
+    return
   }
 
   // Retrieve paths from environment credentials or use arguments
@@ -100,7 +114,7 @@ export const createNextMiddleware = ({
   // Check whether the path of the request should even be checked
   if (pathInRequest(excludeAuth, req) || !pathInRequest(includeAuth, req)) {
     // Current path not part of the checked settings
-    return NextResponse.next()
+    return
   }
 
   const credentialsObject: AuthCredentials =
@@ -114,7 +128,7 @@ export const createNextMiddleware = ({
     const currentUser = basicAuthentication(authHeader)
 
     if (currentUser && compareCredentials(currentUser, credentialsObject)) {
-      return NextResponse.next()
+      return
     }
   }
 
