@@ -21,11 +21,30 @@ yarn add nextjs-basic-auth-middleware
 ### Next.js Middleware
 The Next.js middleware functionality allows you to add basic auth in front of all your requests, see the [Next.js Middleware documentation](https://nextjs.org/docs/advanced-features/middleware) for more information.
 
+You can use the `createNextMiddleware` function to create a default middleware function that sends a `NextResponse.next()` when the auth passes:
+
 ```js
     import { createNextMiddleware } from 'nextjs-basic-auth-middleware'
 
     export const middleware = createNextMiddleware(options)
 ```
+
+You can also use the `nextBasicAuthMiddleware` function to check basic auth in a bigger middleware function:
+
+```js
+    import { nextBasicAuthMiddleware } from 'nextjs-basic-auth-middleware'
+
+    export const middleware = (req) => {
+        nextBasicAuthMiddleware(options, req)
+
+        // Your other middleware functions
+
+        return NextResponse.next()
+    }
+
+```
+
+> :warning: The middleware will still return a 401 and will quit processing the rest of the middleware. Add this middleware after any required work.
 
 
 ### Original approach
@@ -37,7 +56,7 @@ Either add it to individual pages in the `getServerSideProps` method:
     import { pageMiddleware } from 'nextjs-basic-auth-middleware'
 
     export async function getServerSideProps({ req, res }) => {
-        await pageMiddleware(req, res)
+        pageMiddleware(req, res)
         ...
     }
 ```
@@ -48,7 +67,7 @@ Or add the middleware to the `getInitialProps` method of your document:
     import { pageMiddleware } from 'nextjs-basic-auth-middleware'
 
     Document.getInitialProps = async ({ req, res }) => {
-        await pageMiddleware(req, res)
+        pageMiddleware(req, res)
         ...
     }
 ```
