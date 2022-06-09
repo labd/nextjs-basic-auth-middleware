@@ -5,9 +5,9 @@ import {
   compareCredentials,
   parseCredentials,
   AuthCredentials,
-} from './credentials'
-import { pathInRequest } from './path'
-import { basicAuthentication } from './lib/auth'
+} from './credentials.js'
+import { pathInRequest } from './path.js'
+import { basicAuthentication } from './lib/auth.js'
 
 export type MiddlewareOptions = {
   realm?: string

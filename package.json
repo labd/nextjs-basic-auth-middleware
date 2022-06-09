@@ -7,12 +7,18 @@
     "dist"
   ],
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsc",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsc"
   },
   "dependencies": {
   },
