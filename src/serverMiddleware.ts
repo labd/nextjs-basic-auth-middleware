@@ -1,5 +1,4 @@
 import { IncomingMessage, ServerResponse } from 'http'
-import { MiddlewareOptions } from 'types'
 import { basicAuthentication } from './lib/auth'
 import {
   AuthCredentials,
@@ -7,6 +6,7 @@ import {
   parseCredentials,
 } from './lib/credentials'
 import { pathInRequest } from './lib/path'
+import { MiddlewareOptions } from './types'
 
 /**
  * Middleware that sends a basic auth challenge to the user when enabled.

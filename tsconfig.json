@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types"],
+  "include": ["src", "jest.config.js"],
   "compilerOptions": {
     "target": "es2022",
     "module": "esnext",
@@ -21,9 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
-    },
     "jsx": "react",
     "esModuleInterop": true,
     "outDir": "dist"

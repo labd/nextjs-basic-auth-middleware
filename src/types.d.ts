@@ -1,4 +1,4 @@
-import { AuthCredentials } from 'lib/credentials'
+import { AuthCredentials } from './lib/credentials'
 
 export type MiddlewareOptions = {
   realm?: string

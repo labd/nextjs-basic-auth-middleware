@@ -1,5 +1,7 @@
 # nextjs-basic-auth-middleware
 
+> :warning: Current path support in the middleware shouldn't be used, use [matcher](https://nextjs.org/docs/advanced-features/middleware#matcher) to handle paths
+
 Adds basic auth support to Next.js projects using the official middleware approach (with a `_middleware` file).
 An alternative approach for server side rendered (SSR) pages is also available.
 Options can be set on the basic auth middleware and overridden using environment variables.

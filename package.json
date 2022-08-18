@@ -14,20 +14,13 @@
     }
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsc",
-    "test": "jest",
-    "lint": "tsdx lint",
-    "prepare": "tsc"
+    "start": "tsup src/index.ts --watch",
+    "build": "tsup",
+    "test": "jest"
   },
   "dependencies": {},
   "peerDependencies": {
     "next": ">=12"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "prettier": {
     "printWidth": 80,
@@ -51,8 +44,8 @@
     "jest": "28.1.3",
     "next": "12.2.5",
     "node-mocks-http": "1.9.0",
-    "tsdx": "0.14.1",
     "tslib": "2.4.0",
+    "tsup": "6.2.2",
     "typescript": "4.7.3"
   }
 }

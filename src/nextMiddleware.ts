@@ -1,6 +1,5 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { MiddlewareOptions } from 'types'
 import { basicAuthentication } from './lib/auth'
 import {
   AuthCredentials,
@@ -8,6 +7,7 @@ import {
   parseCredentials
 } from './lib/credentials'
 import { pathInRequest } from './lib/path'
+import { MiddlewareOptions } from './types'
 
 /**
  * Creates a default Next middleware function that returns `NextResponse.next()` if the basic auth passes
