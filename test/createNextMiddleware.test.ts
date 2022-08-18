@@ -1,247 +1,211 @@
-import { createRequest, createResponse } from 'node-mocks-http'
+// /**
 
-import { pageMiddleware, createNextMiddleware } from '../src'
+import { NextRequest } from 'next/server'
+
+import { createNextMiddleware } from '../src/nextMiddleware'
 import { createAuthorizationHeader } from './utils'
 
 describe('Basic auth middleware', () => {
+  beforeEach(() => {
+    // Clean up env variables since they leak between tests
+    delete process.env.BASIC_AUTH_CREDENTIALS
+    delete process.env.BASIC_AUTH_PATHS
+    delete process.env.BASIC_AUTH_EXCLUDE_PATHS
+  })
+
   it('does not authenticate when no users are set', async () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-    })
-    const res = createResponse()
+    const req = new NextRequest('https://example.com/test')
 
     const middleware = createNextMiddleware({})
-
-    pageMiddleware(req, res, {})
 
     const result = await middleware(req)
 
     expect(result.status).toBe(200)
   })
 
-  it('returns a 401 when no credentials are given', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-    })
-    const res = createResponse()
+  it('returns a 401 when no credentials are given', async () => {
+    const req = new NextRequest('https://example.com/test')
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
       users: [{ name: 'test', password: 'test' }],
     })
 
-    expect(res.statusCode).toBe(401)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(401)
   })
 
-  it('returns a 200 when the user is authenticated', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
+  it('returns a 200 when the user is authenticated', async () => {
+    const req = new NextRequest('https://example.com/test', {
       headers: {
         Authorization: createAuthorizationHeader('test', 'test'),
       },
     })
-    const res = createResponse()
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
       users: [{ name: 'test', password: 'test' }],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
   })
 
-  it('returns a 401 when the credentials are wrong', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
+  it('returns a 401 when the credentials are wrong', async () => {
+    const req = new NextRequest('https://example.com/test', {
       headers: {
         Authorization: createAuthorizationHeader('test', 'test'),
       },
     })
-    const res = createResponse()
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
       users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res.statusCode).toBe(401)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(401)
   })
 
-  it('returns the correct realm name on a 401', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
+  it('returns the correct realm name on a 401', async () => {
+    const req = new NextRequest('https://example.com/test', {
       headers: {
         Authorization: createAuthorizationHeader('test', 'test'),
       },
     })
-    const res = createResponse()
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
       realm: 'Test',
       users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res._getHeaders()['www-authenticate']).toBe('Basic realm="Test"')
+    const result = await middleware(req)
+
+    expect(result.headers.get('www-authenticate')).toBe('Basic realm="Test"')
   })
 
-  it('prefers using the environment variables when set', () => {
+  it('prefers using the environment variables when set', async () => {
     process.env.BASIC_AUTH_CREDENTIALS = 'test:testing'
 
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
+    const req = new NextRequest('https://example.com/test', {
       headers: {
         Authorization: createAuthorizationHeader('test', 'test'),
       },
     })
-    const res = createResponse()
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
       realm: 'Test',
       users: [{ name: 'test', password: 'test' }],
     })
 
-    expect(res.statusCode).toBe(401)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(401)
   })
 
-  it('only checks if the path has been included', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
+  it('only checks if the path has been included', async () => {
+    const req = new NextRequest('https://example.com/test', {
       headers: {
         Authorization: createAuthorizationHeader('test', 'test'),
       },
     })
-    const res = createResponse()
 
-    pageMiddleware(req, res, {
-      users: [{ name: 'test', password: 'testing' }],
+    const middleware = createNextMiddleware({
       includePaths: ['/testing'],
+      users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
   })
 
-  it('does not check an excluded path', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
-    const res = createResponse()
+  it('does not check an excluded path', async () => {
+    const req = new NextRequest('https://example.com/test')
 
-    pageMiddleware(req, res, {
-      users: [{ name: 'test', password: 'testing' }],
+    const middleware = createNextMiddleware({
       excludePaths: ['/test'],
+      users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
   })
 
-  it('does not check an excluded path', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
-    const res = createResponse()
+  it('checks everything but excluded paths', async () => {
+    const req = new NextRequest('https://example.com/test')
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
+      excludePaths: ['/testing'],
       users: [{ name: 'test', password: 'testing' }],
-      excludePaths: ['/test'],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(401)
   })
 
-  it('does not check an excluded path which is a child of an included path', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test/api',
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
-    const res = createResponse()
+  it('does not check an excluded path which is a child of an included path', async () => {
+    const req = new NextRequest('https://example.com/test/api')
 
-    pageMiddleware(req, res, {
-      users: [{ name: 'test', password: 'testing' }],
+    const middleware = createNextMiddleware({
       includePaths: ['/test'],
       excludePaths: ['/test/api'],
+      users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
   })
 
-  it('prefers the paths being set with environment variables', () => {
+  it('prefers the paths being set with environment variables', async () => {
     process.env.BASIC_AUTH_PATHS = '/testing'
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
-    const res = createResponse()
+    const req = new NextRequest('https://example.com/test')
 
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
       users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
   })
 
-  it('prefers the paths being set with environment variables', () => {
+  it('prefers the paths being set with environment variables', async () => {
     process.env.BASIC_AUTH_EXCLUDE_PATHS = '/'
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
-    const res = createResponse()
+    const req = new NextRequest('https://example.com/test')
 
-    pageMiddleware(req, res, {
-      users: [{ name: 'test', password: 'testing' }],
-      excludePaths: ['/test'],
-    })
-
-    expect(res.statusCode).toBe(200)
-  })
-
-  it('works without setting a default object', () => {
-    const req = createRequest({
-      method: 'GET',
-      url: '/test',
-    })
-    const res = createResponse()
-
-    pageMiddleware(req, res)
-
-    expect(res.statusCode).toBe(200)
-  })
-
-  it('does not process requests without url available', () => {
-    const req = createRequest({
-      method: 'GET',
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
-
-    const res = createResponse()
-
-    pageMiddleware(req, res, {
+    const middleware = createNextMiddleware({
+      excludePaths: ['/testing'],
       users: [{ name: 'test', password: 'testing' }],
     })
 
-    expect(res.statusCode).toBe(200)
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
+  })
+
+  it('processes requests without setting a default object', async () => {
+    const req = new NextRequest('https://example.com/test')
+
+    const middleware = createNextMiddleware()
+
+    const result = await middleware(req)
+
+    expect(result.status).toBe(200)
+  })
+
+  it('processes env variables without setting a basic object', async () => {
+    process.env.BASIC_AUTH_CREDENTIALS = 'test:testing'
+    process.env.BASIC_AUTH_PATHS = '/test'
+    const req = new NextRequest('https://example.com/test')
+
+    const middleware = createNextMiddleware()
+
+    const result = await middleware(req)
+
+    expect(result.status).toBe(401)
   })
 })

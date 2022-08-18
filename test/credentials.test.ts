@@ -1,4 +1,4 @@
-import { parseCredentials, compareCredentials } from '../src/credentials'
+import { compareCredentials, parseCredentials } from '../src/lib/credentials'
 
 describe('parseCredentials', () => {
   it('returns a single user', () => {
@@ -35,7 +35,7 @@ describe('parseCredentials', () => {
 describe('compareCredentials', () => {
   it('returns true when a user matches credentials', () => {
     expect(
-      compareCredentials({ name: 'test', pass: 'test' }, [
+      compareCredentials({ user: 'test', pass: 'test' }, [
         { name: 'test', password: 'test' },
       ])
     ).toBe(true)
@@ -43,31 +43,31 @@ describe('compareCredentials', () => {
 
   it('returns false when a user does not match credentials', () => {
     expect(
-      compareCredentials({ name: 'testing', pass: 'test' }, [
+      compareCredentials({ user: 'testing', pass: 'test' }, [
         { name: 'test', password: 'test' },
       ])
     ).toBe(false)
 
     expect(
-      compareCredentials({ name: 'test', pass: 'secret' }, [
+      compareCredentials({ user: 'test', pass: 'secret' }, [
         { name: 'test', password: 'test' },
       ])
     ).toBe(false)
 
     expect(
-      compareCredentials({ name: 'test', pass: '' }, [
+      compareCredentials({ user: 'test', pass: '' }, [
         { name: 'test', password: 'test' },
       ])
     ).toBe(false)
 
     expect(
-      compareCredentials({ name: '', pass: 'test' }, [
+      compareCredentials({ user: '', pass: 'test' }, [
         { name: 'test', password: 'test' },
       ])
     ).toBe(false)
 
     expect(
-      compareCredentials({ name: '', pass: '' }, [
+      compareCredentials({ user: '', pass: '' }, [
         { name: 'test', password: 'test' },
       ])
     ).toBe(false)
