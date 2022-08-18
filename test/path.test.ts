@@ -1,6 +1,6 @@
 import { createRequest } from 'node-mocks-http'
 
-import { pathInRequest } from '../src/path'
+import { pathInRequest } from '../src/lib/path'
 
 describe('pathInRequest', () => {
   it('returns false when no path is given', () => {
@@ -14,14 +14,14 @@ describe('pathInRequest', () => {
   it('returns true when path is in request', () => {
     const req = createRequest({
       method: 'GET',
-      url: '/test',
+      url: 'https://www.example.com/test',
     })
     expect(pathInRequest(['/test'], req)).toBe(true)
   })
   it('returns false when path is not in request', () => {
     const req = createRequest({
       method: 'GET',
-      url: '/test',
+      url: 'https://www.example.com/test',
     })
     expect(pathInRequest(['/testing'], req)).toBe(false)
   })
