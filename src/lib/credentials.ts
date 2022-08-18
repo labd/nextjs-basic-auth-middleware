@@ -1,5 +1,5 @@
-import { BasicAuthResult } from './lib/auth.js'
-import { safeCompare } from './lib/compare.js'
+import { BasicAuthResult } from './auth'
+import { safeCompare } from './compare'
 
 // This contains all the logic for parsing and checking credentials
 type AuthCredentialsObject = {
