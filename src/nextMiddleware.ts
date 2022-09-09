@@ -4,7 +4,7 @@ import { basicAuthentication } from './lib/auth'
 import {
   AuthCredentials,
   compareCredentials,
-  parseCredentials
+  parseCredentials,
 } from './lib/credentials'
 import { pathInRequest } from './lib/path'
 import { MiddlewareOptions } from './types'
@@ -15,13 +15,15 @@ import { MiddlewareOptions } from './types'
  * @param options Options object based on MiddlewareOptions
  * @returns Either a 401 error or goes to the next page
  */
-export const createNextMiddleware = ({
-  realm = 'protected',
-  users = [],
-  includePaths = ['/'],
-  excludePaths = [],
-}: MiddlewareOptions = {}) => (req: NextRequest) =>
-  nextBasicAuthMiddleware({ realm, users, includePaths, excludePaths }, req)
+export const createNextMiddleware =
+  ({
+    realm = 'protected',
+    users = [],
+    includePaths = ['/'],
+    excludePaths = [],
+  }: MiddlewareOptions = {}) =>
+  (req: NextRequest) =>
+    nextBasicAuthMiddleware({ realm, users, includePaths, excludePaths }, req)
 
 export const nextBasicAuthMiddleware = (
   {
@@ -49,7 +51,6 @@ export const nextBasicAuthMiddleware = (
 
   // Check whether the path of the request should even be checked
   if (pathInRequest(excludeAuth, req) || !pathInRequest(includeAuth, req)) {
-
     // Current path not part of the checked settings
     return NextResponse.next()
   }
@@ -68,9 +69,7 @@ export const nextBasicAuthMiddleware = (
       return NextResponse.next()
     }
   }
-
-
-  return new NextResponse('401 Access Denied', {
+  return NextResponse.next({
     status: 401,
     headers: {
       'WWW-Authenticate': `Basic realm="${realm}"`,
