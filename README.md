@@ -23,12 +23,12 @@ yarn add nextjs-basic-auth-middleware
 ### Next.js Middleware
 The Next.js middleware functionality allows you to add basic auth in front of all your requests, see the [Next.js Middleware documentation](https://nextjs.org/docs/advanced-features/middleware) for more information.
 
-You can use the `createNextMiddleware` function to create a default middleware function that sends a `NextResponse.next()` when the auth passes:
+You can use the `createNextAuthMiddleware` function to create a default middleware function that sends a `NextResponse.next()` when the auth passes:
 
 ```js
-    import { createNextMiddleware } from 'nextjs-basic-auth-middleware'
+    import { createNextAuthMiddleware } from 'nextjs-basic-auth-middleware'
 
-    export const middleware = createNextMiddleware(options)
+    export const middleware = createNextAuthMiddleware(options)
 ```
 
 You can also use the `nextBasicAuthMiddleware` function to check basic auth in a bigger middleware function:

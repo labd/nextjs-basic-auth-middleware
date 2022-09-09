@@ -2,7 +2,7 @@
 
 import { NextRequest } from 'next/server'
 
-import { createNextMiddleware } from '../src/nextMiddleware'
+import { createNextAuthMiddleware } from '../src/nextMiddleware'
 import { createAuthorizationHeader } from './utils'
 
 describe('Basic auth middleware', () => {
@@ -16,7 +16,7 @@ describe('Basic auth middleware', () => {
   it('does not authenticate when no users are set', async () => {
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware({})
+    const middleware = createNextAuthMiddleware({})
 
     const result = await middleware(req)
 
@@ -26,7 +26,7 @@ describe('Basic auth middleware', () => {
   it('returns a 401 when no credentials are given', async () => {
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       users: [{ name: 'test', password: 'test' }],
     })
 
@@ -42,7 +42,7 @@ describe('Basic auth middleware', () => {
       },
     })
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       users: [{ name: 'test', password: 'test' }],
     })
 
@@ -58,7 +58,7 @@ describe('Basic auth middleware', () => {
       },
     })
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       users: [{ name: 'test', password: 'testing' }],
     })
 
@@ -74,7 +74,7 @@ describe('Basic auth middleware', () => {
       },
     })
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       realm: 'Test',
       users: [{ name: 'test', password: 'testing' }],
     })
@@ -93,7 +93,7 @@ describe('Basic auth middleware', () => {
       },
     })
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       realm: 'Test',
       users: [{ name: 'test', password: 'test' }],
     })
@@ -110,7 +110,7 @@ describe('Basic auth middleware', () => {
       },
     })
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       includePaths: ['/testing'],
       users: [{ name: 'test', password: 'testing' }],
     })
@@ -123,7 +123,7 @@ describe('Basic auth middleware', () => {
   it('does not check an excluded path', async () => {
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       excludePaths: ['/test'],
       users: [{ name: 'test', password: 'testing' }],
     })
@@ -136,7 +136,7 @@ describe('Basic auth middleware', () => {
   it('checks everything but excluded paths', async () => {
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       excludePaths: ['/testing'],
       users: [{ name: 'test', password: 'testing' }],
     })
@@ -149,7 +149,7 @@ describe('Basic auth middleware', () => {
   it('does not check an excluded path which is a child of an included path', async () => {
     const req = new NextRequest('https://example.com/test/api')
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       includePaths: ['/test'],
       excludePaths: ['/test/api'],
       users: [{ name: 'test', password: 'testing' }],
@@ -164,7 +164,7 @@ describe('Basic auth middleware', () => {
     process.env.BASIC_AUTH_PATHS = '/testing'
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       users: [{ name: 'test', password: 'testing' }],
     })
 
@@ -177,7 +177,7 @@ describe('Basic auth middleware', () => {
     process.env.BASIC_AUTH_EXCLUDE_PATHS = '/'
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware({
+    const middleware = createNextAuthMiddleware({
       excludePaths: ['/testing'],
       users: [{ name: 'test', password: 'testing' }],
     })
@@ -190,7 +190,7 @@ describe('Basic auth middleware', () => {
   it('processes requests without setting a default object', async () => {
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware()
+    const middleware = createNextAuthMiddleware()
 
     const result = await middleware(req)
 
@@ -202,7 +202,7 @@ describe('Basic auth middleware', () => {
     process.env.BASIC_AUTH_PATHS = '/test'
     const req = new NextRequest('https://example.com/test')
 
-    const middleware = createNextMiddleware()
+    const middleware = createNextAuthMiddleware()
 
     const result = await middleware(req)
 

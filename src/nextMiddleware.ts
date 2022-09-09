@@ -15,7 +15,7 @@ import { MiddlewareOptions } from './types'
  * @param options Options object based on MiddlewareOptions
  * @returns Either a 401 error or goes to the next page
  */
-export const createNextMiddleware =
+export const createNextAuthMiddleware =
   ({
     realm = 'protected',
     users = [],
