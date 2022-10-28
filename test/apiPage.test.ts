@@ -1,5 +1,5 @@
 import { createMocks } from 'node-mocks-http'
-import { createApiPage } from '../src/nextMiddleware'
+import { createApiPage } from '../src/middleware'
 
 describe('apiPage', () => {
   it('returns a 401 page when called', async () => {
