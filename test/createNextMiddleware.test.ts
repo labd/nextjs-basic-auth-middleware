@@ -4,7 +4,7 @@
 
 import { NextRequest } from 'next/server'
 
-import { createNextAuthMiddleware } from '../src/nextMiddleware'
+import { createNextAuthMiddleware } from '../src/middleware'
 import { createAuthorizationHeader } from './utils'
 
 describe('Basic auth middleware', () => {
