@@ -1,7 +1,6 @@
 # nextjs-basic-auth-middleware
 
-Adds basic auth support to Next.js projects using the official middleware approach (with a `_middleware` file).
-An alternative approach for server side rendered (SSR) pages is also available.
+Adds basic auth support to Next.js projects using the official middleware approach (with a `middleware` file).
 Options can be set on the basic auth middleware and overridden using environment variables.
 
 ## Installation
@@ -67,40 +66,7 @@ You can also use the `nextBasicAuthMiddleware` function to check basic auth in a
 
 ### Original SSR approach
 
-This approach only works for server side rendered pages where a request and response object are available.
-
-Either add it to individual pages in the `getServerSideProps` method:
-```js
-    import { pageMiddleware } from 'nextjs-basic-auth-middleware'
-
-    export async function getServerSideProps({ req, res }) => {
-        pageMiddleware(req, res)
-        ...
-    }
-```
-
-Or add the middleware to the `getInitialProps` method of your document:
-
-```js
-    import { pageMiddleware } from 'nextjs-basic-auth-middleware'
-
-    Document.getInitialProps = async ({ req, res }) => {
-        pageMiddleware(req, res)
-        ...
-    }
-```
-> :warning: This will not work if you have pages that use static optimization, e.g. no use of `getInitialProps` or `getServerSideProps`
-
-But this will work anywhere where there is a request and response object available (app/api routes as well).
-
-### What about static pages (SSG, ISR)?
-
-Use the Next.js middleware approach if possible.
-
-Some alternatives if this approach will not work for you:
- -  For Vercel deployments you can check [vercel-basic-auth](https://github.com/flawyte/vercel-basic-auth).
- -  For sites behind AWS CloudFront you can add a Lambda@edge function that adds authentication headers
- -  For Cloudflare you could use a Cloudflare worker that adds authentication headers
+Please check `1.0.0` if you want to use this, this is no longer available in version >=2
 
 ### Setting environment variables
 If you want to override credentials you can use the `BASIC_AUTH_CREDENTIALS` environment variable:
@@ -113,36 +79,16 @@ BASIC_AUTH_CREDENTIALS=user:password
 BASIC_AUTH_CREDENTIALS=user:password|user2:password2
 ```
 
-Users set using environment variables will override and thus disable users set in options.
-You can also set the paths that should (not) be checked:
-
-```sh
-# Enables basic authentication for /pages
-BASIC_AUTH_PATHS=/pages
-
-# You can set multiple paths using `;` as a delimiter
-BASIC_AUTH_PATHS=/pages;/admin
-
-# Setting excluded paths work in the same way
-BASIC_AUTH_EXCLUDE_PATHS=/api;/healthchecks
-```
-
 ## API
-### basicAuthMiddleware()
-```basicAuthMiddleware(req: http.IncomingMessage, res: http.ServerResponse, options)```
+### nextBasicAuthMiddleware()
+```nextBasicAuthMiddleware(req: NextApiRequest, res: http.ServerResponse, options)```
 
 The options object can contain any of the following options:
 
 option | description | default value
 ------ | ----------- | -------------
-`realm`| The name of the basic auth realm | `'Protected'`
+`pathname`| The path that the middleware redirects to | `/api/auth`
 `users`| A list of users that can authenticate | `[]`
-`includePaths`| List of paths that should have protection | `['/']`
-`excludePaths`| List of paths that are excluded from protection | `[]`
-
-> **NOTE**
-> The exclude paths are always excluded from protection,
-> even if they exist in the included paths
 
 The user object consists of the following required fields:
 
