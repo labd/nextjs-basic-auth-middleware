@@ -28,8 +28,6 @@ describe('apiPage', () => {
 
     await apiPage(req, res)
 
-    console.log(res._getData())
-
     expect(res.statusCode).toBe(401)
     expect(res._getHeaders()['www-authenticate']).toEqual(
       `Basic realm="${realm}"`
