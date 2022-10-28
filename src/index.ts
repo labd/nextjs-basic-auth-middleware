@@ -1,4 +1,5 @@
 export {
+  createApiPage,
   createNextAuthMiddleware,
   nextBasicAuthMiddleware,
 } from './nextMiddleware'

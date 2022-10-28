@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { basicAuthentication } from './lib/auth'
@@ -6,7 +7,6 @@ import {
   compareCredentials,
   parseCredentials,
 } from './lib/credentials'
-import { pathInRequest } from './lib/path'
 import { MiddlewareOptions } from './types'
 
 /**
@@ -16,42 +16,18 @@ import { MiddlewareOptions } from './types'
  * @returns Either a 401 error or goes to the next page
  */
 export const createNextAuthMiddleware =
-  ({
-    realm = 'protected',
-    users = [],
-    includePaths = ['/'],
-    excludePaths = [],
-  }: MiddlewareOptions = {}) =>
+  ({ pathname = '/api/auth', users = [] }: MiddlewareOptions = {}) =>
   (req: NextRequest) =>
-    nextBasicAuthMiddleware({ realm, users, includePaths, excludePaths }, req)
+    nextBasicAuthMiddleware({ pathname, users }, req)
 
 export const nextBasicAuthMiddleware = (
-  {
-    realm = 'protected',
-    users = [],
-    includePaths = ['/'],
-    excludePaths = [],
-  }: MiddlewareOptions = {},
+  { pathname = '/api/auth', users = [] }: MiddlewareOptions = {},
   req: NextRequest
 ) => {
   // Check if credentials are set up
   const environmentCredentials = process.env.BASIC_AUTH_CREDENTIALS || ''
   if (environmentCredentials.length === 0 && users.length === 0) {
     // No credentials set up, continue rendering the page as normal
-    return NextResponse.next()
-  }
-
-  // Retrieve paths from environment credentials or use arguments
-  const includeAuth = process.env.BASIC_AUTH_PATHS
-    ? process.env.BASIC_AUTH_PATHS.split(';')
-    : includePaths
-  const excludeAuth = process.env.BASIC_AUTH_EXCLUDE_PATHS
-    ? process.env.BASIC_AUTH_EXCLUDE_PATHS.split(';')
-    : excludePaths
-
-  // Check whether the path of the request should even be checked
-  if (pathInRequest(excludeAuth, req) || !pathInRequest(includeAuth, req)) {
-    // Current path not part of the checked settings
     return NextResponse.next()
   }
 
@@ -69,10 +45,23 @@ export const nextBasicAuthMiddleware = (
       return NextResponse.next()
     }
   }
-  return NextResponse.next({
-    status: 401,
-    headers: {
-      'WWW-Authenticate': `Basic realm="${realm}"`,
-    },
-  })
+  const url = req.nextUrl
+
+  url.pathname = pathname
+
+  return NextResponse.rewrite(url)
 }
+
+/**
+ * Create an API page that handles returning a 401 authentication failed message
+ * @param realm The protection space
+ * @param message Message you want to show to the users
+ * @returns Next API page
+ */
+export const createApiPage =
+  (realm = 'protected', message = 'Authentication failed') =>
+  (_: NextApiRequest, res: NextApiResponse) => {
+    res.setHeader('WWW-Authenticate', `Basic realm="${realm}"`)
+    res.statusCode = 401
+    res.end(message)
+  }
