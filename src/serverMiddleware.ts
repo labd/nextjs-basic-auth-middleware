@@ -6,7 +6,7 @@ import {
   parseCredentials,
 } from './lib/credentials'
 import { pathInRequest } from './lib/path'
-import { MiddlewareOptions } from './types'
+import { ServerMiddlewareOptions } from './types'
 
 /**
  * Middleware that sends a basic auth challenge to the user when enabled.
@@ -22,7 +22,7 @@ export const serverMiddleware = (
     users = [],
     includePaths = ['/'],
     excludePaths = [],
-  }: MiddlewareOptions = {}
+  }: ServerMiddlewareOptions = {}
 ) => {
   if (!req?.url) {
     // Current request object has no url defined so cannot set up basic authentication
