@@ -1,5 +1,7 @@
 # nextjs-basic-auth-middleware
 
+> :warning: Please upgrade to v2 if you use Next.js middleware version, v1 is broken. SSR Middleware for Next <=11 is still available on v1.
+
 Adds basic auth support to Next.js projects using the official middleware approach (with a `middleware` file).
 Options can be set on the basic auth middleware and overridden using environment variables.
 
