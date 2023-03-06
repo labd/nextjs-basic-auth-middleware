@@ -10,5 +10,7 @@ export default defineConfig([
     format: ['cjs', 'esm'],
     outDir: 'dist',
     external: ['fsevents'],
+    minify: true,
+    target: 'node16',
   },
 ])

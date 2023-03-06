@@ -1,7 +1,15 @@
 {
+  "name": "nextjs-basic-auth-middleware",
   "version": "3.0.1",
+  "author": "Boris Besemer",
+  "module": "dist/index.js",
+  "homepage": "https://github.com/labd/nextjs-basic-auth-middleware#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/labd/nextjs-basic-auth-middleware"
+  },
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -13,6 +21,7 @@
       "require": "./dist/index.js"
     }
   },
+  "type": "module",
   "scripts": {
     "start": "tsup src/index.ts --watch",
     "build": "tsup",
@@ -23,24 +32,10 @@
   "peerDependencies": {
     "next": ">=13.1"
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
-  "name": "nextjs-basic-auth-middleware",
-  "author": "Boris Besemer",
-  "module": "dist/nextjs-basic-auth-middleware.esm.js",
-  "homepage": "https://github.com/labd/nextjs-basic-auth-middleware#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/labd/nextjs-basic-auth-middleware"
-  },
   "devDependencies": {
     "@changesets/cli": "2.26.0",
-    "@edge-runtime/jest-environment": "^1.1.0-beta.26",
-    "@labdigital/eslint-config-node": "^0.0.5",
+    "@edge-runtime/jest-environment": "1.1.0-beta.26",
+    "@labdigital/eslint-config-node": "0.0.5",
     "@types/jest": "26.0.15",
     "@types/node": "14.14.8",
     "eslint": "8.35.0",
@@ -51,5 +46,11 @@
     "tslib": "2.4.0",
     "tsup": "6.2.2",
     "typescript": "4.7.3"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }
