@@ -17,7 +17,8 @@
     "start": "tsup src/index.ts --watch",
     "build": "tsup",
     "lint": "eslint src/ --ext ts",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc --noEmit -p ."
   },
   "peerDependencies": {
     "next": ">=13.1"
