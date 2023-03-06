@@ -1,2 +1,5 @@
-export { createNextAuthMiddleware, nextBasicAuthMiddleware } from './middleware'
+export {
+  createNextAuthMiddleware,
+  nextBasicAuthMiddleware,
+} from './middleware.js'
 export type { MiddlewareOptions } from './types'

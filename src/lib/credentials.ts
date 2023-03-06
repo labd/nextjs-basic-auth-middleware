@@ -1,5 +1,5 @@
-import { BasicAuthResult } from './auth'
-import { safeCompare } from './compare'
+import { BasicAuthResult } from './auth.js'
+import { safeCompare } from './compare.js'
 
 // This contains all the logic for parsing and checking credentials
 type AuthCredentialsObject = {
@@ -12,7 +12,7 @@ export type AuthCredentials = AuthCredentialsObject[]
 export const parseCredentials = (credentials: string): AuthCredentials => {
   const authCredentials: AuthCredentials = []
 
-  credentials.split('|').forEach(item => {
+  credentials.split('|').forEach((item) => {
     if (item.length < 3) {
       throw new Error(
         `Received incorrect basic auth syntax, use <username>:<password>, received ${item}`
@@ -46,7 +46,7 @@ export const compareCredentials = (
   requiredCredentials: AuthCredentials
 ): boolean =>
   requiredCredentials.some(
-    item =>
+    (item) =>
       safeCompare(input.user, item.name) &&
       safeCompare(input.pass, item.password)
   )

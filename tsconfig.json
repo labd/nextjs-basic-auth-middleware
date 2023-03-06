@@ -1,8 +1,8 @@
 {
-  "include": ["src", "jest.config.js"],
+  "include": ["src", "jest.config.cjs", ".eslintrc.cjs"],
   "compilerOptions": {
     "target": "es2022",
-    "module": "esnext",
+    "module": "nodenext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     "declaration": true,
