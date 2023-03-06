@@ -82,6 +82,8 @@ option | description | default value
 ------ | ----------- | -------------
 `pathname`| The path that the middleware redirects to | `/api/auth`
 `users`| A list of users that can authenticate | `[]`
+`message`| Message to display to the user when authentication fails | `Authentication failed`
+`realm` | Realm to show in the WWW-Authenticate header | `protected`
 
 The user object consists of the following required fields:
 
@@ -111,5 +113,3 @@ The package is optimized and bundled with Rollup into multiple formats (CommonJS
 Runs the test watcher (Jest) in an interactive mode.
 By default, runs tests related to files changed since the last commit.
 
-
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
