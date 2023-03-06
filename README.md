@@ -37,15 +37,6 @@ You can use the `createNextAuthMiddleware` function to create a default middlewa
     }
 ```
 
-Next create the API page that returns the `401` response:
-
-```js
-    // pages/api/auth.ts
-    import { createApiPage } from 'nextjs-basic-auth-middleware'
-
-    export default createApiPage()
-```
-
 **Optional**
 
 You can also use the `nextBasicAuthMiddleware` function to check basic auth in a bigger middleware function:
