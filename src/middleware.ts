@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { basicAuthentication } from './lib/auth'
@@ -16,12 +15,22 @@ import { MiddlewareOptions } from './types'
  * @returns Either a 401 error or goes to the next page
  */
 export const createNextAuthMiddleware =
-  ({ pathname = '/api/auth', users = [] }: MiddlewareOptions = {}) =>
+  ({
+    pathname = '/api/auth',
+    users = [],
+    message = 'Authentication failed',
+    realm = 'protected',
+  }: MiddlewareOptions = {}) =>
   (req: NextRequest) =>
-    nextBasicAuthMiddleware({ pathname, users }, req)
+    nextBasicAuthMiddleware({ pathname, users, message, realm }, req)
 
 export const nextBasicAuthMiddleware = (
-  { pathname = '/api/auth', users = [] }: MiddlewareOptions = {},
+  {
+    pathname = '/api/auth',
+    users = [],
+    message = 'Authentication failed',
+    realm = 'protected',
+  }: MiddlewareOptions = {},
   req: NextRequest
 ) => {
   // Check if credentials are set up
@@ -49,19 +58,8 @@ export const nextBasicAuthMiddleware = (
 
   url.pathname = pathname
 
-  return NextResponse.rewrite(url)
+  return new NextResponse(message, {
+    status: 401,
+    headers: { 'WWW-Authenticate': `Basic realm="${realm}"` },
+  })
 }
-
-/**
- * Create an API page that handles returning a 401 authentication failed message
- * @param realm The protection space
- * @param message Message you want to show to the users
- * @returns Next API page
- */
-export const createApiPage =
-  (realm = 'protected', message = 'Authentication failed') =>
-  (_: NextApiRequest, res: NextApiResponse) => {
-    res.setHeader('WWW-Authenticate', `Basic realm="${realm}"`)
-    res.statusCode = 401
-    res.end(message)
-  }
