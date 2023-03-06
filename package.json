@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -38,6 +38,7 @@
     "url": "git+https://github.com/labd/nextjs-basic-auth-middleware"
   },
   "devDependencies": {
+    "@changesets/cli": "2.26.0",
     "@edge-runtime/jest-environment": "^1.1.0-beta.26",
     "@labdigital/eslint-config-node": "^0.0.5",
     "@types/jest": "26.0.15",
