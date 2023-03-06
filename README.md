@@ -9,8 +9,8 @@ Options can be set on the basic auth middleware and overridden using environment
 
 | Next.js version | Plugin version |
 | --------------- | -------------- |
-| Next.js 13      | 3.x            |
-| Next.js 12      | 2.x            |
+| Next.js >=13.1  | 3.x            |
+| Next.js 12,13.0 | 2.x            |
 | Next.js 10,11   | 1.x            |
 
 
