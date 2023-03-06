@@ -2,8 +2,8 @@ lockfileVersion: 5.4
 
 specifiers:
   '@changesets/cli': 2.26.0
-  '@edge-runtime/jest-environment': ^1.1.0-beta.26
-  '@labdigital/eslint-config-node': ^0.0.5
+  '@edge-runtime/jest-environment': 1.1.0-beta.26
+  '@labdigital/eslint-config-node': 0.0.5
   '@types/jest': 26.0.15
   '@types/node': 14.14.8
   eslint: 8.35.0
@@ -17,7 +17,7 @@ specifiers:
 
 devDependencies:
   '@changesets/cli': 2.26.0
-  '@edge-runtime/jest-environment': 1.1.0
+  '@edge-runtime/jest-environment': 1.1.0-beta.26
   '@labdigital/eslint-config-node': 0.0.5_7fv6kz5iltjkvzucfmjf76htfu
   '@types/jest': 26.0.15
   '@types/node': 14.14.8
@@ -554,8 +554,8 @@ packages:
       prettier: 2.8.4
     dev: true
 
-  /@edge-runtime/jest-environment/1.1.0:
-    resolution: {integrity: sha512-YwiR+zxAt3BksS1DrOuVdqnDw+18EZxm3vpGo8vuxqKXOg9UNdmj7c3nfkdTdhQ3gr3+sSpcS/4+vLoqW1QSKA==}
+  /@edge-runtime/jest-environment/1.1.0-beta.26:
+    resolution: {integrity: sha512-NnnYjF3Kaw83Vrkoy0lpuZCk49VjR5Ruo5XDjZ9dKqslA6lNVBkirTDvQrQBYSTaZM8lu3Ed39o50zH2Ua4lTw==}
     dependencies:
       '@edge-runtime/vm': 1.1.0
       '@jest/environment': 28.1.3
