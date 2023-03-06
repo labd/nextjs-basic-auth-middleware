@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+- 598cca4: Properly minify modules
+  Move towards ESM first with CommonJS as secondary output
+
 ## 3.0.1
 
 ### Patch Changes
