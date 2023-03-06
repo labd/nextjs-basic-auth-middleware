@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server'
+// eslint-disable-next-line no-duplicate-imports
 import { NextResponse } from 'next/server'
 import { basicAuthentication } from './lib/auth'
 import {
