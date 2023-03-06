@@ -1,9 +1,18 @@
 # nextjs-basic-auth-middleware
 
-> :warning: Please upgrade to v2 if you use Next.js middleware version, v1 is broken. SSR Middleware for Next <=11 is still available on v1.
+
 
 Adds basic auth support to Next.js projects using the official middleware approach (with a `middleware` file).
 Options can be set on the basic auth middleware and overridden using environment variables.
+
+## Compatibility table
+
+| Next.js version | Plugin version |
+| --------------- | -------------- |
+| Next.js 13      | 3.x            |
+| Next.js 12      | 2.x            |
+| Next.js 10,11   | 1.x            |
+
 
 ## Installation
 
@@ -57,10 +66,6 @@ You can also use the `nextBasicAuthMiddleware` function to check basic auth in a
 > :warning: The middleware will still return a 401 and will quit processing the rest of the middleware. Add this middleware after any required work.
 
 
-### Original SSR approach
-
-Please check `1.0.0` if you want to use this, this is no longer available in version >=2
-
 ### Setting environment variables
 If you want to override credentials you can use the `BASIC_AUTH_CREDENTIALS` environment variable:
 
@@ -93,23 +98,4 @@ field | description | type
 `password`| The password | `string`
 
 
-## Local Development
-
-Below is a list of commands you will probably find useful.
-
-### `npm start` or `yarn start`
-
-Runs the project in development/watch mode. Your project will be rebuilt upon changes. TSDX has a special logger for your convenience. Error messages are pretty printed and formatted for compatibility VS Code's Problems tab.
-
-Your library will be rebuilt if you make edits.
-
-### `npm run build` or `yarn build`
-
-Bundles the package to the `dist` folder.
-The package is optimized and bundled with Rollup into multiple formats (CommonJS, UMD, and ES Module).
-
-### `npm test` or `yarn test`
-
-Runs the test watcher (Jest) in an interactive mode.
-By default, runs tests related to files changed since the last commit.
 
