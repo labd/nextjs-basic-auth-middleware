@@ -1,5 +1,6 @@
 ---
-'nextjs-basic-auth-middleware': patch
+'nextjs-basic-auth-middleware': minor
 ---
 
-Minify and properly name output files
+Properly minify modules
+Move towards ESM first with CommonJS as secondary output
