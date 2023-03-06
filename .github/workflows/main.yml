@@ -1,8 +1,11 @@
 name: Main
+
+
 on:
   push:
     branches: ['main']
-  pull_request: [opened, synchronize]
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   lint:
