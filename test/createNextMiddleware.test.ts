@@ -32,9 +32,12 @@ describe('Basic auth middleware', () => {
 
     const result = await middleware(req)
 
-    expect(result.headers.get('x-middleware-rewrite')).toContain(
-      'https://example.com/api/auth'
+    expect(result.status).toBe(401)
+    expect(result.headers.get('WWW-Authenticate')).toContain(
+      'Basic realm="protected"'
     )
+    const body = await result.text()
+    expect(body).toEqual('Authentication failed')
   })
 
   it('returns the page when the user is authenticated', async () => {
@@ -67,9 +70,7 @@ describe('Basic auth middleware', () => {
 
     const result = await middleware(req)
 
-    expect(result.headers.get('x-middleware-rewrite')).toContain(
-      'https://example.com/api/auth'
-    )
+    expect(result.status).toBe(401)
   })
 
   it('prefers using the environment variables when set', async () => {
@@ -87,9 +88,7 @@ describe('Basic auth middleware', () => {
 
     const result = await middleware(req)
 
-    expect(result.headers.get('x-middleware-rewrite')).toContain(
-      'https://example.com/api/auth'
-    )
+    expect(result.status).toBe(401)
   })
 
   it('processes requests without setting a default object', async () => {
@@ -112,8 +111,25 @@ describe('Basic auth middleware', () => {
 
     const result = await middleware(req)
 
-    expect(result.headers.get('x-middleware-rewrite')).toContain(
-      'https://example.com/api/auth'
+    expect(result.status).toBe(401)
+  })
+
+  it('allows you to edit realm and message', async () => {
+    const req = new NextRequest('https://example.com/test')
+
+    const middleware = createNextAuthMiddleware({
+      users: [{ name: 'test', password: 'test' }],
+      realm: 'Test',
+      message: 'Test forbidden',
+    })
+
+    const result = await middleware(req)
+
+    expect(result.status).toBe(401)
+    expect(result.headers.get('WWW-Authenticate')).toContain(
+      'Basic realm="Test"'
     )
+    const body = await result.text()
+    expect(body).toEqual('Test forbidden')
   })
 })
