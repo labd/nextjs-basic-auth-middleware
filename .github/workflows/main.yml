@@ -2,7 +2,7 @@ name: Main
 on:
   push:
     branches: ['main']
-  pull_request: [opened, synchronized]
+  pull_request: [opened, synchronize]
 
 jobs:
   lint:
