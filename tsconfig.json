@@ -1,5 +1,5 @@
 {
-  "include": ["src", "jest.config.cjs", ".eslintrc.cjs"],
+  "include": ["src", "jest.config.cjs", ".eslintrc.cjs", "tsup.config.cjs"],
   "compilerOptions": {
     "target": "es2022",
     "module": "nodenext",

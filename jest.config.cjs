@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const nextJest = require('next/jest')
 
 const createJestConfig = nextJest()
 
 // Any custom config you want to pass to Jest
 const customJestConfig = {
+  coverageProvider: 'v8',
   testMatch: ['**/*.test.js', '**/*.test.ts', '**/*.test.tsx'],
   verbose: true,
   transformIgnorePatterns: ['/next[/\\\\]dist/', '/\\.next/'],
