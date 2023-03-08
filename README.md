@@ -54,7 +54,10 @@ You can also use the `nextBasicAuthMiddleware` function to check basic auth in a
     import { nextBasicAuthMiddleware } from 'nextjs-basic-auth-middleware'
 
     export const middleware = (req) => {
-        nextBasicAuthMiddleware(options, req)
+        const basicAuth = nextBasicAuthMiddleware({}, req);
+        if (basicAuth.headers.get('x-middleware-rewrite')) {
+            return basicAuth;
+        }
 
         // Your other middleware functions here
 
