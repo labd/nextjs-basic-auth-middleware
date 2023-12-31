@@ -20,6 +20,7 @@ export const parseCredentials = (credentials: string): AuthCredentials => {
     }
     const parsedCredentials = item.split(':')
     if (
+      parsedCredentials.length !== 2 ||
       parsedCredentials[0].length === 0 ||
       parsedCredentials[1].length === 0
     ) {
