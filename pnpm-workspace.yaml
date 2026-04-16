@@ -1,0 +1,4 @@
+minimumReleaseAge: 14d
+minimumReleaseAgeExclude:
+  - "@biomejs/*"
+  - sharp
