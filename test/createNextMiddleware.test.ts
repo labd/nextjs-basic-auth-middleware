@@ -1,135 +1,131 @@
-/**
- * @jest-environment @edge-runtime/jest-environment
- */
+import { NextRequest } from "next/server";
+import { beforeEach, describe, expect, it } from "vitest";
+import { createNextAuthMiddleware } from "../src/middleware.ts";
+import { createAuthorizationHeader } from "./utils.ts";
 
-import { NextRequest } from 'next/server'
+describe("Basic auth middleware", () => {
+	beforeEach(() => {
+		// Clean up env variables since they leak between tests
+		delete process.env.BASIC_AUTH_CREDENTIALS;
+	});
 
-import { createNextAuthMiddleware } from '../src/middleware'
-import { createAuthorizationHeader } from './utils'
+	it("does not authenticate when no users are set", async () => {
+		const req = new NextRequest("https://example.com/test");
 
-describe('Basic auth middleware', () => {
-  beforeEach(() => {
-    // Clean up env variables since they leak between tests
-    delete process.env.BASIC_AUTH_CREDENTIALS
-  })
+		const middleware = createNextAuthMiddleware({});
 
-  it('does not authenticate when no users are set', async () => {
-    const req = new NextRequest('https://example.com/test')
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware({})
+		expect(result.headers.get("x-middleware-next")).toContain("1");
+	});
 
-    const result = await middleware(req)
+	it("redirects to auth api page when no credentials are given", async () => {
+		const req = new NextRequest("https://example.com/test");
 
-    expect(result.headers.get('x-middleware-next')).toContain('1')
-  })
+		const middleware = createNextAuthMiddleware({
+			users: [{ name: "test", password: "test" }],
+		});
 
-  it('redirects to auth api page when no credentials are given', async () => {
-    const req = new NextRequest('https://example.com/test')
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware({
-      users: [{ name: 'test', password: 'test' }],
-    })
+		expect(result.status).toBe(401);
+		expect(result.headers.get("WWW-Authenticate")).toContain(
+			'Basic realm="protected"',
+		);
+		const body = await result.text();
+		expect(body).toEqual("Authentication failed");
+	});
 
-    const result = await middleware(req)
+	it("returns the page when the user is authenticated", async () => {
+		const req = new NextRequest("https://example.com/test", {
+			headers: {
+				Authorization: createAuthorizationHeader("test", "test"),
+			},
+		});
 
-    expect(result.status).toBe(401)
-    expect(result.headers.get('WWW-Authenticate')).toContain(
-      'Basic realm="protected"'
-    )
-    const body = await result.text()
-    expect(body).toEqual('Authentication failed')
-  })
+		const middleware = createNextAuthMiddleware({
+			users: [{ name: "test", password: "test" }],
+		});
 
-  it('returns the page when the user is authenticated', async () => {
-    const req = new NextRequest('https://example.com/test', {
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware({
-      users: [{ name: 'test', password: 'test' }],
-    })
+		expect(result.status).toBe(200);
+		expect(result.headers.get("x-middleware-next")).toContain("1");
+	});
 
-    const result = await middleware(req)
+	it("returns a 401 when the credentials are wrong", async () => {
+		const req = new NextRequest("https://example.com/test", {
+			headers: {
+				Authorization: createAuthorizationHeader("test", "test"),
+			},
+		});
 
-    expect(result.status).toBe(200)
-    expect(result.headers.get('x-middleware-next')).toContain('1')
-  })
+		const middleware = createNextAuthMiddleware({
+			users: [{ name: "test", password: "testing" }],
+		});
 
-  it('returns a 401 when the credentials are wrong', async () => {
-    const req = new NextRequest('https://example.com/test', {
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware({
-      users: [{ name: 'test', password: 'testing' }],
-    })
+		expect(result.status).toBe(401);
+	});
 
-    const result = await middleware(req)
+	it("prefers using the environment variables when set", async () => {
+		process.env.BASIC_AUTH_CREDENTIALS = "test:testing";
 
-    expect(result.status).toBe(401)
-  })
+		const req = new NextRequest("https://example.com/test", {
+			headers: {
+				Authorization: createAuthorizationHeader("test", "test"),
+			},
+		});
 
-  it('prefers using the environment variables when set', async () => {
-    process.env.BASIC_AUTH_CREDENTIALS = 'test:testing'
+		const middleware = createNextAuthMiddleware({
+			users: [{ name: "test", password: "test" }],
+		});
 
-    const req = new NextRequest('https://example.com/test', {
-      headers: {
-        Authorization: createAuthorizationHeader('test', 'test'),
-      },
-    })
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware({
-      users: [{ name: 'test', password: 'test' }],
-    })
+		expect(result.status).toBe(401);
+	});
 
-    const result = await middleware(req)
+	it("processes requests without setting a default object", async () => {
+		const req = new NextRequest("https://example.com/test");
 
-    expect(result.status).toBe(401)
-  })
+		const middleware = createNextAuthMiddleware();
 
-  it('processes requests without setting a default object', async () => {
-    const req = new NextRequest('https://example.com/test')
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware()
+		expect(result.status).toBe(200);
+		expect(result.headers.get("x-middleware-next")).toContain("1");
+	});
 
-    const result = await middleware(req)
+	it("processes env variables without setting a basic object", async () => {
+		process.env.BASIC_AUTH_CREDENTIALS = "test:testing";
+		process.env.BASIC_AUTH_PATHS = "/test";
+		const req = new NextRequest("https://example.com/test");
 
-    expect(result.status).toBe(200)
-    expect(result.headers.get('x-middleware-next')).toContain('1')
-  })
+		const middleware = createNextAuthMiddleware();
 
-  it('processes env variables without setting a basic object', async () => {
-    process.env.BASIC_AUTH_CREDENTIALS = 'test:testing'
-    process.env.BASIC_AUTH_PATHS = '/test'
-    const req = new NextRequest('https://example.com/test')
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware()
+		expect(result.status).toBe(401);
+	});
 
-    const result = await middleware(req)
+	it("allows you to edit realm and message", async () => {
+		const req = new NextRequest("https://example.com/test");
 
-    expect(result.status).toBe(401)
-  })
+		const middleware = createNextAuthMiddleware({
+			users: [{ name: "test", password: "test" }],
+			realm: "Test",
+			message: "Test forbidden",
+		});
 
-  it('allows you to edit realm and message', async () => {
-    const req = new NextRequest('https://example.com/test')
+		const result = await middleware(req);
 
-    const middleware = createNextAuthMiddleware({
-      users: [{ name: 'test', password: 'test' }],
-      realm: 'Test',
-      message: 'Test forbidden',
-    })
-
-    const result = await middleware(req)
-
-    expect(result.status).toBe(401)
-    expect(result.headers.get('WWW-Authenticate')).toContain(
-      'Basic realm="Test"'
-    )
-    const body = await result.text()
-    expect(body).toEqual('Test forbidden')
-  })
-})
+		expect(result.status).toBe(401);
+		expect(result.headers.get("WWW-Authenticate")).toContain(
+			'Basic realm="Test"',
+		);
+		const body = await result.text();
+		expect(body).toEqual("Test forbidden");
+	});
+});

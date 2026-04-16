@@ -4,19 +4,19 @@
  * @returns Boolean that confirms whether the string is the same
  */
 export const safeCompare = (a: string, b: string) => {
-  const stringA = String(a)
-  const lengthA = stringA.length
-  let stringB = String(b)
-  let result = 0
+	const stringA = String(a);
+	const lengthA = stringA.length;
+	let stringB = String(b);
+	let result = 0;
 
-  if (lengthA !== stringB.length) {
-    stringB = stringA
-    result = 1
-  }
+	if (lengthA !== stringB.length) {
+		stringB = stringA;
+		result = 1;
+	}
 
-  for (let i = 0; i < lengthA; i++) {
-    result |= stringA.charCodeAt(i) ^ stringB.charCodeAt(i)
-  }
+	for (let i = 0; i < lengthA; i++) {
+		result |= stringA.charCodeAt(i) ^ stringB.charCodeAt(i);
+	}
 
-  return result === 0
-}
+	return result === 0;
+};
