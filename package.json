@@ -1,6 +1,6 @@
 {
 	"name": "nextjs-basic-auth-middleware",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"author": "Boris Besemer",
 	"publishConfig": {
 		"access": "public",

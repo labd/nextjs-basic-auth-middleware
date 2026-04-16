@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.1.1
+
+### Patch Changes
+
+- f706747: Fix security and correctness issues in auth middleware
+
+  - Catch exceptions from malformed auth headers (returns 401 instead of 500)
+  - Fix parseCredentials to allow colons in passwords (split on first colon only)
+  - Eliminate timing leak in compareCredentials (always evaluate both comparisons)
+  - Remove dead pathname option that had no effect
+
+- f706747: Switch npm publishing from token-based auth to OIDC trusted publishing
+
 ## 3.1.0
 
 ### Minor Changes
