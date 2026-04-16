@@ -2,6 +2,10 @@
 	"name": "nextjs-basic-auth-middleware",
 	"version": "3.1.0",
 	"author": "Boris Besemer",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
 	"module": "dist/index.js",
 	"homepage": "https://github.com/labd/nextjs-basic-auth-middleware#readme",
 	"repository": {
@@ -30,7 +34,8 @@
 		"lint:fix": "biome check --write .",
 		"test": "vitest run",
 		"test:ci": "vitest run --coverage",
-		"tsc": "tsc --noEmit -p ."
+		"tsc": "tsc --noEmit -p .",
+		"publish:ci": "pnpm build && pnpm changeset publish"
 	},
 	"peerDependencies": {
 		"next": ">=13.1"
