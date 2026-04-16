@@ -15,17 +15,15 @@ import type { MiddlewareOptions } from "./types.js";
  */
 export const createNextAuthMiddleware =
 	({
-		pathname = "/api/auth",
 		users = [],
 		message = "Authentication failed",
 		realm = "protected",
 	}: MiddlewareOptions = {}) =>
 	(req: NextRequest) =>
-		nextBasicAuthMiddleware({ pathname, users, message, realm }, req);
+		nextBasicAuthMiddleware({ users, message, realm }, req);
 
 export const nextBasicAuthMiddleware = (
 	{
-		pathname = "/api/auth",
 		users = [],
 		message = "Authentication failed",
 		realm = "protected",
@@ -47,15 +45,16 @@ export const nextBasicAuthMiddleware = (
 	const authHeader = req.headers.get("authorization");
 
 	if (authHeader) {
-		const currentUser = basicAuthentication(authHeader);
+		try {
+			const currentUser = basicAuthentication(authHeader);
 
-		if (currentUser && compareCredentials(currentUser, credentialsObject)) {
-			return NextResponse.next();
+			if (currentUser && compareCredentials(currentUser, credentialsObject)) {
+				return NextResponse.next();
+			}
+		} catch {
+			// Malformed authorization header — fall through to 401
 		}
 	}
-	const url = req.nextUrl;
-
-	url.pathname = pathname;
 
 	return new NextResponse(message, {
 		status: 401,

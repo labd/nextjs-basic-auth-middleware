@@ -110,6 +110,39 @@ describe("Basic auth middleware", () => {
 		expect(result.status).toBe(401);
 	});
 
+	it("returns 401 for malformed base64 in authorization header", async () => {
+		const req = new NextRequest("https://example.com/test", {
+			headers: {
+				Authorization: "Basic !!!invalid-base64!!!",
+			},
+		});
+
+		const middleware = createNextAuthMiddleware({
+			users: [{ name: "test", password: "test" }],
+		});
+
+		const result = await middleware(req);
+
+		expect(result.status).toBe(401);
+	});
+
+	it("authenticates with colons in password via env var", async () => {
+		process.env.BASIC_AUTH_CREDENTIALS = "test:pass:word";
+
+		const req = new NextRequest("https://example.com/test", {
+			headers: {
+				Authorization: createAuthorizationHeader("test", "pass:word"),
+			},
+		});
+
+		const middleware = createNextAuthMiddleware();
+
+		const result = await middleware(req);
+
+		expect(result.status).toBe(200);
+		expect(result.headers.get("x-middleware-next")).toContain("1");
+	});
+
 	it("allows you to edit realm and message", async () => {
 		const req = new NextRequest("https://example.com/test");
 

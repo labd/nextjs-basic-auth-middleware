@@ -34,6 +34,22 @@ describe("parseCredentials", () => {
 	it("throws an error on missing password", () => {
 		expect(() => parseCredentials("bla:")).toThrow();
 	});
+
+	it("handles passwords containing colons", () => {
+		expect(parseCredentials("user:pass:word")).toEqual([
+			{
+				name: "user",
+				password: "pass:word",
+			},
+		]);
+	});
+
+	it("handles multiple users with colons in passwords", () => {
+		expect(parseCredentials("user:p:w|admin:a:b:c")).toEqual([
+			{ name: "user", password: "p:w" },
+			{ name: "admin", password: "a:b:c" },
+		]);
+	});
 });
 
 describe("compareCredentials", () => {

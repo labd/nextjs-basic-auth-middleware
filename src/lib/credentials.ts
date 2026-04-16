@@ -13,25 +13,16 @@ export const parseCredentials = (credentials: string): AuthCredentials => {
 	const authCredentials: AuthCredentials = [];
 
 	credentials.split("|").forEach((item) => {
-		if (item.length < 3) {
-			throw new Error(
-				`Received incorrect basic auth syntax, use <username>:<password>, received ${item}`,
-			);
-		}
-		const parsedCredentials = item.split(":");
-		if (
-			parsedCredentials.length !== 2 ||
-			parsedCredentials[0].length === 0 ||
-			parsedCredentials[1].length === 0
-		) {
+		const index = item.indexOf(":");
+		if (index < 1 || index === item.length - 1) {
 			throw new Error(
 				`Received incorrect basic auth syntax, use <username>:<password>, received ${item}`,
 			);
 		}
 
 		authCredentials.push({
-			name: parsedCredentials[0],
-			password: parsedCredentials[1],
+			name: item.substring(0, index),
+			password: item.substring(index + 1),
 		});
 	});
 
@@ -46,8 +37,8 @@ export const compareCredentials = (
 	input: BasicAuthResult,
 	requiredCredentials: AuthCredentials,
 ): boolean =>
-	requiredCredentials.some(
-		(item) =>
-			safeCompare(input.user, item.name) &&
-			safeCompare(input.pass, item.password),
-	);
+	requiredCredentials.some((item) => {
+		const userMatch = safeCompare(input.user, item.name);
+		const passMatch = safeCompare(input.pass, item.password);
+		return userMatch && passMatch;
+	});
