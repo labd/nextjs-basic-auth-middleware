@@ -1,13 +1,11 @@
-import type { NextRequest } from 'next/server'
-// eslint-disable-next-line no-duplicate-imports
-import { NextResponse } from 'next/server'
-import { basicAuthentication } from './lib/auth.js'
+import { type NextRequest, NextResponse } from "next/server";
+import { basicAuthentication } from "./lib/auth.ts";
 import {
-  AuthCredentials,
-  compareCredentials,
-  parseCredentials,
-} from './lib/credentials'
-import { MiddlewareOptions } from './types'
+	type AuthCredentials,
+	compareCredentials,
+	parseCredentials,
+} from "./lib/credentials.ts";
+import type { MiddlewareOptions } from "./types.js";
 
 /**
  * Creates a default Next middleware function that returns `NextResponse.next()` if the basic auth passes
@@ -16,51 +14,51 @@ import { MiddlewareOptions } from './types'
  * @returns Either a 401 error or goes to the next page
  */
 export const createNextAuthMiddleware =
-  ({
-    pathname = '/api/auth',
-    users = [],
-    message = 'Authentication failed',
-    realm = 'protected',
-  }: MiddlewareOptions = {}) =>
-  (req: NextRequest) =>
-    nextBasicAuthMiddleware({ pathname, users, message, realm }, req)
+	({
+		pathname = "/api/auth",
+		users = [],
+		message = "Authentication failed",
+		realm = "protected",
+	}: MiddlewareOptions = {}) =>
+	(req: NextRequest) =>
+		nextBasicAuthMiddleware({ pathname, users, message, realm }, req);
 
 export const nextBasicAuthMiddleware = (
-  {
-    pathname = '/api/auth',
-    users = [],
-    message = 'Authentication failed',
-    realm = 'protected',
-  }: MiddlewareOptions = {},
-  req: NextRequest
+	{
+		pathname = "/api/auth",
+		users = [],
+		message = "Authentication failed",
+		realm = "protected",
+	}: MiddlewareOptions = {},
+	req: NextRequest,
 ) => {
-  // Check if credentials are set up
-  const environmentCredentials = process.env.BASIC_AUTH_CREDENTIALS || ''
-  if (environmentCredentials.length === 0 && users.length === 0) {
-    // No credentials set up, continue rendering the page as normal
-    return NextResponse.next()
-  }
+	// Check if credentials are set up
+	const environmentCredentials = process.env.BASIC_AUTH_CREDENTIALS || "";
+	if (environmentCredentials.length === 0 && users.length === 0) {
+		// No credentials set up, continue rendering the page as normal
+		return NextResponse.next();
+	}
 
-  const credentialsObject: AuthCredentials =
-    environmentCredentials.length > 0
-      ? parseCredentials(environmentCredentials)
-      : users
+	const credentialsObject: AuthCredentials =
+		environmentCredentials.length > 0
+			? parseCredentials(environmentCredentials)
+			: users;
 
-  const authHeader = req.headers.get('authorization')
+	const authHeader = req.headers.get("authorization");
 
-  if (authHeader) {
-    const currentUser = basicAuthentication(authHeader)
+	if (authHeader) {
+		const currentUser = basicAuthentication(authHeader);
 
-    if (currentUser && compareCredentials(currentUser, credentialsObject)) {
-      return NextResponse.next()
-    }
-  }
-  const url = req.nextUrl
+		if (currentUser && compareCredentials(currentUser, credentialsObject)) {
+			return NextResponse.next();
+		}
+	}
+	const url = req.nextUrl;
 
-  url.pathname = pathname
+	url.pathname = pathname;
 
-  return new NextResponse(message, {
-    status: 401,
-    headers: { 'WWW-Authenticate': `Basic realm="${realm}"` },
-  })
-}
+	return new NextResponse(message, {
+		status: 401,
+		headers: { "WWW-Authenticate": `Basic realm="${realm}"` },
+	});
+};

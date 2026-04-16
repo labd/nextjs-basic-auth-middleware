@@ -1,0 +1,30 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+	"files": {
+		"includes": ["src/**", "test/**", "*.config.ts", "*.json", ".github/**"]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "off"
+			},
+			"correctness": {
+				"noUnusedImports": "error"
+			}
+		}
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	}
+}
