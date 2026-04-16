@@ -84,6 +84,8 @@ jobs:
 
       - name: Set up Node.js
         uses: labd/gh-actions-typescript/pnpm-install@4d7a6c7088328753fdbacbb9204aae4e2b9b00e2 # 1.0.0
+        with:
+          node-version: 24.x
 
       - name: Build
         run: pnpm build
