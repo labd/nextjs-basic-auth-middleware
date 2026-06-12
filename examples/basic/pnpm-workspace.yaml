@@ -1,2 +1,4 @@
 overrides:
   nextjs-basic-auth-middleware: link:../..
+minimumReleaseAge: 10080 # 1 week
+trustPolicy: no-downgrade

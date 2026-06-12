@@ -1,4 +1,5 @@
-minimumReleaseAge: 14d
+minimumReleaseAge: 10080 # 1 week
+trustPolicy: no-downgrade
 minimumReleaseAgeExclude:
   - "@biomejs/*"
   - sharp
