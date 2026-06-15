@@ -1,5 +1,11 @@
+allowBuilds:
+  esbuild: false # postinstall not necessary for functionality, see https://github.com/evanw/esbuild/issues/4085
+  sharp: false
 minimumReleaseAge: 10080 # 1 week
 trustPolicy: no-downgrade
 minimumReleaseAgeExclude:
   - "@biomejs/*"
   - sharp
+savePrefix: ''
+autoInstallPeers: true
+strictPeerDependencies: false

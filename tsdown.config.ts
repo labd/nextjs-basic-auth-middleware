@@ -8,5 +8,6 @@ export default defineConfig({
 	hash: false,
 	sourcemap: true,
 	format: ["esm", "cjs"],
+	fixedExtension: false,
 	outDir: "dist",
 });
