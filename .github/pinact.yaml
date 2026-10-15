@@ -1,0 +1,10 @@
+version: 3
+
+min_age:
+  value: 7
+
+rules:
+  # First-party actions are trusted, skip the min-age check for them
+  - min_age: 0
+    conditions:
+      - expr: ActionRepoOwner == "labd"
