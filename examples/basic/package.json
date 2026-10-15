@@ -8,13 +8,13 @@
 		"start": "next start"
 	},
 	"dependencies": {
-		"next": "15.5.15",
-		"react": "19.1.0",
-		"react-dom": "19.1.0",
-		"nextjs-basic-auth-middleware": "latest"
+		"next": "16.4.0",
+		"nextjs-basic-auth-middleware": "latest",
+		"react": "19.3.0",
+		"react-dom": "19.3.0"
 	},
 	"devDependencies": {
-		"@types/react": "19.1.4",
-		"typescript": "5.8.3"
+		"@types/react": "19.3.0",
+		"typescript": "7.0.2"
 	}
 }
