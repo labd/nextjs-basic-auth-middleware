@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0
+
+### Minor Changes
+
+- 0a35e61: Update dependencies
+
 ## 3.1.1
 
 ### Patch Changes
