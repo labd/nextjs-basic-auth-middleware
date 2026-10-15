@@ -3,3 +3,4 @@ allowBuilds:
   sharp: true
 # Require packages to be at least 7 days old before being allowed to be installed
 minimumReleaseAge: 10080
+trustPolicy: no-downgrade
