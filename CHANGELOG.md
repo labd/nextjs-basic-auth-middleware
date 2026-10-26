@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.3.0
+
+### Minor Changes
+
+- e11b943: Publish as ESM-only. The CommonJS build (`dist/index.cjs`) is removed; the package now ships `dist/index.js` + `dist/index.d.ts` with `exports` conditions `types` and `default`. CommonJS consumers on Node.js >= 22.12 can still `require()` the package.
+- 4a9b989: Require Node.js >= 22 (`engines.node` is now `>=22`). Node.js 20 and older are end-of-life and no longer supported.
+
 ## 3.2.0
 
 ### Minor Changes
