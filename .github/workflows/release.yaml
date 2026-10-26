@@ -71,6 +71,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Lint package
+        run: pnpm lint:package
+
   release:
     name: Release
     needs: [build]
