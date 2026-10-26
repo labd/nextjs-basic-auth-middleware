@@ -1,6 +1,6 @@
 # nextjs-basic-auth-middleware
 
-
+[![npm](https://img.shields.io/npm/v/nextjs-basic-auth-middleware)](https://www.npmjs.com/package/nextjs-basic-auth-middleware)
 
 Adds basic auth support to Next.js projects using the official middleware approach (with a `middleware` file).
 Options can be set on the basic auth middleware and overridden using environment variables.
