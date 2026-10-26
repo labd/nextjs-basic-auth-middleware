@@ -7,7 +7,6 @@
 		"registry": "https://registry.npmjs.org/",
 		"provenance": true
 	},
-	"module": "dist/index.js",
 	"homepage": "https://github.com/labd/nextjs-basic-auth-middleware#readme",
 	"repository": {
 		"type": "git",
@@ -17,17 +16,18 @@
 	"engines": {
 		"node": ">=22"
 	},
-	"main": "dist/index.cjs",
-	"typings": "dist/index.d.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"files": [
 		"dist"
 	],
 	"sideEffects": false,
 	"exports": {
 		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
-		}
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
 	},
 	"type": "module",
 	"scripts": {
@@ -40,7 +40,8 @@
 		"test:ci": "vitest run --coverage",
 		"tsc": "tsc --noEmit -p .",
 		"publish:ci": "pnpm build && pnpm changeset publish",
-		"publish:version": "pnpm changeset version && pnpm format"
+		"publish:version": "pnpm changeset version && pnpm format",
+		"lint:package": "publint --strict"
 	},
 	"peerDependencies": {
 		"next": ">=13.1"
@@ -51,6 +52,7 @@
 		"@types/node": "26.6.5",
 		"@vitest/coverage-v8": "5.0.5",
 		"next": "16.4.2",
+		"publint": "0.3.25",
 		"tsdown": "0.23.1",
 		"typescript": "7.0.2",
 		"vitest": "5.0.5"
