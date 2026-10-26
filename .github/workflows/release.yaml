@@ -34,14 +34,19 @@ jobs:
         run: pnpm tsc
 
   test:
-    name: Test
+    name: Test on Node ${{ matrix.node }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["22.x", "24.x", "26.x"]
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Node.js
         uses: labd/gh-actions-typescript/pnpm-install@ada4548df9a365c62c8b396b583953c6d4bc113f # v1.1.0
+        with:
+          node-version: ${{ matrix.node }}
 
       - name: Test
         run: pnpm test
@@ -69,7 +74,7 @@ jobs:
   release:
     name: Release
     needs: [build]
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -86,7 +91,7 @@ jobs:
         uses: labd/gh-actions-typescript/pnpm-install@ada4548df9a365c62c8b396b583953c6d4bc113f # v1.1.0
         with:
           node-version: 24.x
-          cache: false
+          cache: "false"
 
       - name: Build
         run: pnpm build
@@ -100,6 +105,7 @@ jobs:
           pr-title: "Release new version"
           commit-message: "update version"
           publish-script: pnpm publish:ci
+          version-script: pnpm publish:version
           # v2 pushes the release commit and tags through the GitHub API; the
           # git CLI path keeps the previous behaviour.
           push-with-git-cli: true
