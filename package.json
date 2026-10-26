@@ -40,8 +40,7 @@
 		"test:ci": "vitest run --coverage",
 		"tsc": "tsc --noEmit -p .",
 		"publish:ci": "pnpm build && pnpm changeset publish",
-		"publish:version": "pnpm changeset version && pnpm format",
-		"lint:package": "publint --strict"
+		"publish:version": "pnpm changeset version && pnpm format"
 	},
 	"peerDependencies": {
 		"next": ">=13.1"
