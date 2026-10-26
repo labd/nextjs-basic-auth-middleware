@@ -99,9 +99,19 @@ jobs:
       - name: Upgrade npm for trusted publishing
         run: npm i -g npm@11.12.1
 
+      - name: Create release app token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Create and publish versions
         uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           pr-title: "Release new version"
           commit-message: "update version"
           publish-script: pnpm publish:ci
@@ -110,5 +120,4 @@ jobs:
           # git CLI path keeps the previous behaviour.
           push-with-git-cli: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
