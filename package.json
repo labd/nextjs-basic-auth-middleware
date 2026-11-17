@@ -50,7 +50,7 @@
 		"@changesets/cli": "3.0.3",
 		"@types/node": "26.6.5",
 		"@vitest/coverage-v8": "5.0.5",
-		"next": "16.4.2",
+		"next": "16.4.5",
 		"publint": "0.3.25",
 		"tsdown": "0.23.1",
 		"typescript": "7.0.2",
